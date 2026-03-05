@@ -5,93 +5,65 @@ using UnityEngine.EventSystems;
 
 public class AbilityButtonUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
+    public AbilityData ability;
+    public AbilityUser player;
+
     public Image icon;
     public TMP_Text cooldownText;
     public Button button;
 
-    private AbilityData ability;
-    private AbilityUser user;
+    public TooltipUI tooltip;
 
-    private TooltipUI tooltip;
+    int cooldownRemaining = 0;
 
-    private int currentCooldown = 0;
-
-    public void Setup(AbilityData data, AbilityUser abilityUser)
+    void Start()
     {
-        ability = data;
-        user = abilityUser;
-
         icon.sprite = ability.icon;
-
-        tooltip = Object.FindFirstObjectByType<TooltipUI>();
-
-        button.onClick.AddListener(OnClick);
-
-        UpdateCooldownUI();
+        button.onClick.AddListener(UseAbility);
+        UpdateUI();
     }
 
-    void OnClick()
+    void UseAbility()
     {
-        if (user == null || ability == null) return;
-
-        if (!user.CanAct())
-        {
-            Debug.Log("Already acted this turn.");
+        if (!player.CanAct())
             return;
-        }
 
-        if (currentCooldown > 0)
-        {
-            Debug.Log("Ability on cooldown.");
+        if (cooldownRemaining > 0)
             return;
-        }
 
-        user.UseAbility(ability);
+        player.UseAbility(ability);
 
-        currentCooldown = ability.cooldownTurns;
+        cooldownRemaining = ability.cooldownTurns;
 
-        UpdateCooldownUI();
+        UpdateUI();
     }
 
     public void ReduceCooldown()
     {
-        if (currentCooldown <= 0) return;
-
-        currentCooldown--;
-
-        UpdateCooldownUI();
+        if (cooldownRemaining > 0)
+        {
+            cooldownRemaining--;
+            UpdateUI();
+        }
     }
 
-    void UpdateCooldownUI()
+    void UpdateUI()
     {
-        if (currentCooldown > 0)
-        {
-            cooldownText.text = currentCooldown.ToString();
-            button.interactable = false;
-        }
-        else
-        {
-            cooldownText.text = "";
-            button.interactable = true;
-        }
+        cooldownText.text = cooldownRemaining > 0 ? cooldownRemaining.ToString() : "";
+        button.interactable = cooldownRemaining == 0;
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (tooltip == null) return;
-
-        string info =
+        tooltip.Show(
             ability.abilityName +
             "\nDamage: " + ability.damage +
-            "\nCooldown: " + ability.cooldownTurns;
-
-        tooltip.Show(info);
+            "\nCooldown: " + ability.cooldownTurns
+        );
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (tooltip == null) return;
-
         tooltip.Hide();
     }
 }

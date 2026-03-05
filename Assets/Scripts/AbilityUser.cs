@@ -4,7 +4,7 @@ public class AbilityUser : MonoBehaviour
 {
     public Health target;
 
-    private bool hasActed = false;
+    bool hasActed = false;
 
     public bool CanAct()
     {
@@ -22,7 +22,12 @@ public class AbilityUser : MonoBehaviour
 
         hasActed = true;
 
-        FindFirstObjectByType<TurnManager>().EndPlayerTurn();
+        TurnManager tm = FindFirstObjectByType<TurnManager>();
+
+        if (tm != null)
+        {
+            tm.EndPlayerTurn();
+        }
     }
 
     public void ResetTurn()

@@ -14,8 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AbilityData
   abilityName: Cleave
   description: Add 2 bleed stacks
-  damage: 6
-  statusEffect: {fileID: 11400000, guid: 6200616596a4f6941ae6df403e88f7ce, type: 2}
-  statusStacks: 2
   icon: {fileID: -6995123011722499173, guid: 42c753ad9a8cd7b418fc942b1b15dff4, type: 3}
-  cooldownTurns: 1
+  damage: 6
+  cooldownTurns: 0

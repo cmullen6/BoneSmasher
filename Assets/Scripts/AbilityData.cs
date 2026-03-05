@@ -1,19 +1,16 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Abilities/New Ability")]
+[CreateAssetMenu(menuName = "Combat/Ability")]
 public class AbilityData : ScriptableObject
 {
     public string abilityName;
+
+    [TextArea]
     public string description;
 
-    [Header("Combat")]
-    public int damage;
-    public StatusEffectData statusEffect;
-    public int statusStacks;
-
-    [Header("UI")]
     public Sprite icon;
 
-    [Header("Cooldown")]
+    public int damage;
+
     public int cooldownTurns = 0;
 }

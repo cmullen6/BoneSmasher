@@ -4,29 +4,35 @@ public class TurnManager : MonoBehaviour
 {
     public AbilityUser player;
 
-    private AbilityButtonUI[] abilityButtons;
+    AbilityButtonUI[] buttons;
+
+    int turnNumber = 1;
 
     void Start()
     {
-        abilityButtons = FindObjectsByType<AbilityButtonUI>(FindObjectsSortMode.None);
+        buttons = FindObjectsByType<AbilityButtonUI>(FindObjectsSortMode.None);
+        StartPlayerTurn();
     }
 
     public void EndPlayerTurn()
     {
         Debug.Log("Enemy Turn");
 
+        // Enemy would act here
         Invoke(nameof(StartPlayerTurn), 1f);
     }
 
     void StartPlayerTurn()
     {
+        turnNumber++;
+
         player.ResetTurn();
 
-        foreach (AbilityButtonUI btn in abilityButtons)
+        foreach (AbilityButtonUI b in buttons)
         {
-            btn.ReduceCooldown();
+            b.ReduceCooldown();
         }
 
-        Debug.Log("Player Turn");
+        Debug.Log("Turn " + turnNumber);
     }
 }
